@@ -18,4 +18,3 @@ Feature: Login
   Scenario: Login With Correct Details
     Given I login with valid credentials
     Then I see the home page
-

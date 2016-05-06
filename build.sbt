@@ -36,8 +36,10 @@ lazy val svc = (project in file("svc"))
     cache,
     javaWs,
     evolutions,
+    mysqlconn,
     jdbc,
     filters,
+    commonsIO,
     "com.typesafe.play" %% "play-mailer" % "3.0.1",
     "io.jsonwebtoken" % "jjwt" % "0.6.0"
   ) ++ Lib.test(
@@ -57,7 +59,7 @@ lazy val testsetup = (project in file("testsetup"))
   .settings(Settings.basicSettings: _*)
   .settings(Settings.serviceSettings: _*)
   .settings(libraryDependencies ++= Seq(
-    javaJpa, hibernate, cache, javaWs, evolutions, h2, selenium
+    javaJpa, hibernate, cache, javaWs, evolutions, h2, selenium, dbunit, mysqlconn
   ) ++ Lib.test(
     junit
   ))
