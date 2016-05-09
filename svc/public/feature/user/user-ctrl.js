@@ -1,10 +1,14 @@
-angular.module("pamm").controller("userCtrl", ["$rootScope", "$state", "$log", "userContext",
-    function ($rootScope, $state, $log, userContext) {
+angular.module("pamm").controller("userCtrl", ["$rootScope", "$state", "$log", "$uibModal", "userContext",
+    function ($rootScope, $state, $log, $uibModal, userContext) {
         var vm = this;
 
         (function init() {
-            vm.aboutVisible = false;
             vm.user = userContext.getUser();
+
+            if (!vm.user) {
+                $log.info("User has not logged on or has pressed refreshed");
+                $state.go("user.login");
+            }
         })();
 
         vm.logout = function () {
@@ -15,9 +19,24 @@ angular.module("pamm").controller("userCtrl", ["$rootScope", "$state", "$log", "
         };
 
         vm.showAbout = function () {
-            alert("Not Implemented");
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: "feature/common/about/about.html",
+                controller: "aboutCtrl",
+                size: "lg",
+                backdrop: 'static'
+            });
         };
 
+        vm.showHelp = function () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: "feature/common/help/help.html",
+                controller: "helpCtrl",
+                size: "lg",
+                backdrop: 'static'
+            });
+        };
 
         vm.isAtHome = function () {
             return $state.is("user.home");

@@ -1,8 +1,14 @@
 @image-path: "/resource/image";
+@container-width: 1200px;
+@min-screen-width: 480px;
 
 [data-ng-controller~="userCtrl"] {
   height: 100%;
-  min-width: 480px;
+  min-width: @min-screen-width;
+
+  i {
+    margin: 0 8px 0 8px;
+  }
 
   header {
     background: #fafafa;
@@ -21,27 +27,44 @@
     }
 
     .app-bar {
-      margin: 0 5px 0 5px;
-      color: #2b669a;
       font-size: 9pt;
+      color: #204d74;
 
-      span {
-        color: gray;
+      > div:first-child {
+        max-width: @container-width;
       }
 
-      span, a {
-        margin: 0 5px 0 5px;
-
-        * {
-          vertical-align: middle;
+      [uib-dropdown] {
+        i {
+          margin-top: 5px;
+          transition: 0.3s linear background-color;
+          cursor: pointer;
+          &:hover {
+            transition: 0.3s linear background-color;
+            color: #d9edf7;
+          }
+        }
+        ul {
+          left: -200%;
+          color: #204d74;
+          min-width: 0;
+          background-color: #fefefe;
+          li {
+            width: 120px;
+            transition: 0.3s linear background-color;
+            padding: 5px;
+            .fa {
+              width: 10px;
+              text-align: center;
+            }
+            &:hover {
+              background-color: #b9def0;
+            }
+          }
         }
       }
-
-      i {
-        margin-right:5px;
-      }
-
     }
+
 
     a.disabled {
       pointer-events: none;

@@ -1,24 +1,37 @@
-<div class="container" data-ng-controller="userCtrl as u">
-  <header class="row">
-    <div class="app-logo pull-left"></div>
-    <div class="app-bar pull-right">
-      <span class="hidden-xs"><i class="fa fa-user"></i>{{u.user.forename}} {{u.user.surname}}&nbsp;|</span>
-      <a class="hidden-xs" data-ng-click="u.logout()" title="Logout of the application"><i class="fa fa-power-off"></i>Sign Out</a>
-      <a class="hidden-xs"><i class="fa fa-question"></i>Help</a>
-      <a class="hidden-xs" data-ng-click="u.showAbout()"><i class="fa fa-info"></i>About</a>
-    </div>
+<div data-ng-controller="userCtrl as u">
+  <header>
+    <div class="container-fluid">
+      <div class="app-logo pull-left"></div>
+      <div class="app-bar pull-right">
+        <div class="hidden-sm hidden-xs">
+          <span><i class="fa fa-user"></i>{{::u.user.forename}}&nbsp;{{::u.user.surname}}&nbsp;|</span>
+          <a data-ng-click="u.logout()" title="Logout of the application"><i class="fa fa-power-off"></i>Sign Out</a>
+          <a data-ng-click="u.showHelp()"><i class="fa fa-question"></i>Help</a>
+          <a data-ng-click="u.showAbout()"><i class="fa fa-info"></i>About</a>
+        </div>
 
-    <nav>
-      <ul class="nav nav-tabs">
-        <li data-ng-class="{'active': u.isAtHome()}">
-          <a data-ng-click="u.navigateToHome()"><i class="fa fa-home"></i>&nbsp;Home</a>
-        </li>
-        <li data-ng-class="{'active': u.isAtProjects()}"><a data-ng-click="u.navigateToProjects()">Projects</a></li>
-      </ul>
-    </nav>
+        <div class="btn-group visible-sm visible-xs" uib-dropdown>
+          <i class="fa fa-th-list fa-2x" uib-dropdown-toggle></i>
+          <ul uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-single-button">
+            <li role="menuitem" data-ng-click="u.logout()"><i class="fa fa-power-off"></i>logout</li>
+            <li role="menuitem" data-ng-click="u.showHelp()"><i class="fa fa-question"></i>Help</li>
+            <li role="menuitem" data-ng-click="u.showAbout()"><i class="fa fa-info"></i>About</li>
+          </ul>
+        </div>
+      </div>
+
+      <nav>
+        <ul class="nav nav-tabs">
+          <li data-ng-class="{'active': u.isAtHome()}">
+            <a data-ng-click="u.navigateToHome()"><i class="fa fa-home"></i>&nbsp;Home</a>
+          </li>
+          <li data-ng-class="{'active': u.isAtProjects()}"><a data-ng-click="u.navigateToProjects()">Projects</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-  <div class="row">
+  <div class="container-fluid">
     <aside class="col-md-3 col-sm-4">
       <project-summary project="u.getSelectedProject()"></project-summary>
       <div data-ui-view="sidebar-menu"></div>

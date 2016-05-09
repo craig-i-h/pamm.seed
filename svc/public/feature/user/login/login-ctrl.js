@@ -5,6 +5,11 @@ angular.module("pamm").controller("userLoginCtrl", ["$state", "$log", "userConte
         var vm = this;
 
         (function init() {
+            if (userContext.getUser()) {
+                $log.info("userLoginCtrl - user had already logged on (back button). Returning user to last state");
+                userContext.returnToLastState();
+            }
+
             vm.hasAuthenticationError = false;
         })();
 

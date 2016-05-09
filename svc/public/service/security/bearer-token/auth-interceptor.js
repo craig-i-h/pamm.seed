@@ -36,5 +36,14 @@ angular.module("pamm").service("authInterceptor", ["$log", "$q", "$injector",
         }
     }]).config(["$httpProvider",
     function ($httpProvider) {
+        if (!$httpProvider.defaults.headers.get) {
+            $httpProvider.defaults.headers.get = {};
+        }
+        // Prevent responses from being cached by the browser (specifically for Internet Explorer).
+        $httpProvider.defaults.headers.get["Cache-Control"] = "no-cache";
+        $httpProvider.defaults.headers.get["Pragma"] = "no-cache";
+        $httpProvider.defaults.headers.get["Expires"] = "0";
+
         $httpProvider.interceptors.push("authInterceptor");
     }]);
+

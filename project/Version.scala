@@ -14,4 +14,9 @@ object Version {
   val HIBERNATE     = "5.1.0.Final"
   val H2            = "1.4.190"
   val SELENIUM      = "2.48.2"
+  val PLAYMAILER    = "3.0.1"
+  val JJWT          = "0.6.0"
+  val HTTPCLIENT    = "4.5.1"
+  val HTTPCORE      = "4.4.4"
+  val COMMONS_IO    = "2.5"
 }

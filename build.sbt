@@ -40,8 +40,8 @@ lazy val svc = (project in file("svc"))
     jdbc,
     filters,
     commonsIO,
-    "com.typesafe.play" %% "play-mailer" % "3.0.1",
-    "io.jsonwebtoken" % "jjwt" % "0.6.0"
+    playMailer,
+    jjwt
   ) ++ Lib.test(
     junit
   ))

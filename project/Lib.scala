@@ -29,5 +29,9 @@ object Lib {
   val h2            = "com.h2database"              %   "h2"                      % Version.H2
   val selenium      = "org.seleniumhq.selenium"     %   "selenium-server"         % Version.SELENIUM
   val commonsIO     = "commons-io"                  %   "commons-io"              % Version.COMMONS_IO
+  val playMailer    = "com.typesafe.play"           %   "play-mailer_2.11"        % Version.PLAYMAILER
+  val jjwt          = "io.jsonwebtoken"             %   "jjwt"                    % Version.JJWT
+  val httpclient    = "org.apache.httpcomponents"   %   "httpclient"              % Version.HTTPCLIENT
+  val httpcore      = "org.apache.httpcomponents"   %   "httpcore"                % Version.HTTPCORE
 
 }
