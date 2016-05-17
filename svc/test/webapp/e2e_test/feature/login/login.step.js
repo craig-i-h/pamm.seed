@@ -28,7 +28,7 @@ module.exports = function loginTest() {
         expect(login.passwordRequiredError.isPresent()).to.eventually.be.false;
     });
 
-    test.Given("I try to login without entering any credentials", function () {
+        test.Given("I try to login without entering any credentials", function () {
         login.login();
     });
 
