@@ -2,8 +2,9 @@
 
 module.exports = function loginTest() {
     var LoginPage = require("./login.page.js");
-
     var testData = require("./login-data.json");
+    var SetupServiceCaller = require("../setup/setup-service-caller.js");
+    var db = new SetupServiceCaller();
 
     /*************************
     /* pass in test data here using param in command line
@@ -14,6 +15,7 @@ module.exports = function loginTest() {
     var test = this;
 
     this.setDefaultTimeout(60000);
+    db.update("login-test.sql");
 
     test.Given(/I am on the login view at the start/, function () {
         login.visitPage();
@@ -37,8 +39,6 @@ module.exports = function loginTest() {
     test.Given("I login with invalid credentials", function (next) {
         login.fillInDetails(testData.userName, testData.incorrectPassword);
         login.login().then(function () {
-            expect(login.usernameRequiredError.isPresent()).to.eventually.be.true;
-            expect(login.passwordRequiredError.isPresent()).to.eventually.be.true;
             next();
         });
     });
