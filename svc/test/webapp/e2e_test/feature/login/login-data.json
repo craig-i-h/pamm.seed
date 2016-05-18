@@ -2,6 +2,6 @@
   "userName": "phillip.chan@atos.net",
   "password": "password",
   "incorrectPassword": "xxxxx",
-  "homeURL": "http://localhost:9000/user/home",
-  "loginURL": "http://localhost:9000/user/login"
+  "homeURL": "http://localhost:9000/#/user/home",
+  "loginURL": "http://localhost:9000/#/user/login"
 }
