@@ -40,6 +40,7 @@ lazy val svc = (project in file("svc"))
 
 lazy val testsetup = (project in file("testsetup"))
   .enablePlugins(PlayJava)
+  .settings(PlayKeys.externalizeResources := false)
   .settings(Settings.basicSettings: _*)
   .settings(Settings.serviceSettings: _*)
   .settings(libraryDependencies ++= Seq(
