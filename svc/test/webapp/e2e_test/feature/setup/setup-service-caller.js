@@ -15,7 +15,7 @@ module.exports = (function () {
     };
 
     SetupServiceCaller.prototype.query = function (name) {
-    
+
         var pathUrl = getTestSetupUrl() + '/query/' + name;
 
         // This returns a promise.  Use success call back to check database
@@ -25,6 +25,7 @@ module.exports = (function () {
     function getTestSetupUrl(){
         var testSetupURL = browser.params.testsetupurl;
         if (testSetupURL == null || testSetupURL == undefined){
+            //Set to default value
             testSetupURL = "http://localhost:9001";
         }
 
