@@ -44,7 +44,7 @@ lazy val testsetup = (project in file("testsetup"))
   .settings(Settings.basicSettings: _*)
   .settings(Settings.serviceSettings: _*)
   .settings(libraryDependencies ++= Seq(
-    javaJpa, hibernate, cache, javaWs, evolutions, h2, selenium
+    javaJpa, hibernate, cache, javaWs, evolutions, h2, selenium, mysqlconn
   ) ++ Lib.test(
     junit
   ))
