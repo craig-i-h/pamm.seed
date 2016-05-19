@@ -7,18 +7,29 @@ module.exports = (function () {
     }
 
     SetupServiceCaller.prototype.update = function (name) {
-        var pathUrl = 'http://localhost:9001/update/' + name;
+
+        var pathUrl = getTestSetupUrl() + "/update/"  + name;
 
         // This returns a promise.  Use success call back to check database
         return request(pathUrl);
     };
 
     SetupServiceCaller.prototype.query = function (name) {
-        var pathUrl = 'http://localhost:9001/query/' + name;
+    
+        var pathUrl = getTestSetupUrl() + '/query/' + name;
 
         // This returns a promise.  Use success call back to check database
         return request(pathUrl);
     };
+
+    function getTestSetupUrl(){
+        var testSetupURL = browser.params.testsetupurl;
+        if (testSetupURL == null || testSetupURL == undefined){
+            testSetupURL = "http://localhost:9001";
+        }
+
+        return testSetupURL;
+    }
 
     return SetupServiceCaller;
 })();
