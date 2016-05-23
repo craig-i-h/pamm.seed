@@ -18,6 +18,8 @@
 # Usage:
 #   sh start.sh
 #
+DIR=$PWD
+echo "current directory is $DIR"
 echo initialising the pamm-sql databale
 sh pamm-sql.sh
 
@@ -25,20 +27,24 @@ echo creating a distribution for the PAMM application
 activator svc/dist
 
 echo preparing and launching the PAMM application
-cd svc/target/unviversal
-unzip svc-0.0.1-SNAPSHOT.zip & rm svc-0.0.1-SNAPSHOT.zip
-export PLAY_DIR=svc-0.0.1-SNAPSHOT
-(java -cp "$PLAY_DIR/lib/*" -Dhttp.port=8080 -Ddb.default.url="jdbc:mysql://localhost:3306/pamm?useUnicode=true&characterEncoding=utf8" play.core.server.ProdServerStart $PLAY_DIR)
+cd $DIR/svc/target/universal
+unzip $DIR/svc/target/universal/svc-0.0.1-SNAPSHOT.zip
+rm $DIR/svc/target/universal/svc-0.0.1-SNAPSHOT.zip
+export PLAY_DIR=$DIR/svc/target/universal/svc-0.0.1-SNAPSHOT
+(java -cp "$PLAY_DIR/lib/*" -Dhttp.port=8080 -Ddb.default.url="jdbc:mysql://localhost:3306/pamm?useUnicode=true&characterEncoding=utf8" play.core.server.ProdServerStart $PLAY_DIR &)
 
+cd $DIR
 echo creating a distribution for the TestSetup service
 activator testsetup/dist
 
 echo preparing and launching the TestSetup application
 cd testsetup/target/universal
-unzip testsetup-0.0.1-SNAPSHOT.zip & testsetup-0.0.1-SNAPSHOT.zip
+unzip testsetup-0.0.1-SNAPSHOT.zip
+rm testsetup-0.0.1-SNAPSHOT.zip
 export TEST_SETUP_DIR=testsetup-0.0.1-SNAPSHOT
-java -cp "$TEST_SETUP_DIR/lib/*" -Dhttp.port=8081 -Ddb.default.url="jdbc:mysql://localhost:3306/pamm?useUnicode=true&characterEncoding=utf8" play.core.server.ProdServerStart $TEST_SETUP_DIR &
+(java -cp "$TEST_SETUP_DIR/lib/*" -Dhttp.port=8081 -Ddb.default.url="jdbc:mysql://localhost:3306/pamm?useUnicode=true&characterEncoding=utf8" play.core.server.ProdServerStart $TEST_SETUP_DIR &)
 
+cd $DIR
 echo installing PAMM application Javascript packages
 npm install
 
