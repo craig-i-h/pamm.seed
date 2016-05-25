@@ -42,6 +42,6 @@ CREATE TABLE project_user (
 
 # --- !Downs
 
-DROP TABLE project_user;
-DROP TABLE project;
-DROP TABLE user;
+#DROP TABLE project_user;
+#DROP TABLE project;
+#DROP TABLE user;
