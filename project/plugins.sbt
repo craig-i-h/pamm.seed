@@ -15,3 +15,6 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-play-enhancer" % "1.1.0")
 
 // Java Code Coverage Plugin
 addSbtPlugin("de.johoop" % "jacoco4sbt" % "2.1.6")
+
+//SBT assembly plugin
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.3")

@@ -13,7 +13,7 @@ CREATE TABLE user (
   phone              VARCHAR(20),
   activation_date    DATE,
   failed_login_count INTEGER      NOT NULL DEFAULT 0,
-  last_access        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_access        TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   role               VARCHAR(10)  NOT NULL,
   PRIMARY KEY (id)
 );

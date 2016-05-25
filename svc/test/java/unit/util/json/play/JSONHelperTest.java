@@ -2,6 +2,7 @@ package util.json.play;
 
 import org.junit.Assert;
 import org.junit.Test;
+import pamm.infrastructure.util.JSONHelper;
 
 public class JSONHelperTest
 {
@@ -34,29 +35,4 @@ public class JSONHelperTest
         Assert.assertEquals(jsonString, JSONHelperBuilder.VALID_TEST_CLASS_JSON);
     }
 
-    @Test
-    public void testCreateJSONErrorMessageWithNull()
-    {
-        JSONHelper jsonHelper = new JSONHelper();
-        try
-        {
-            jsonHelper.createJSONErrorMessage(null, 1, "", "");
-
-            Assert.fail("Null pointer Exception should have been thrown");
-        }
-        catch (NullPointerException npe)
-        {
-            Assert.assertTrue(true);
-        }
-    }
-
-    @Test
-    public void testCreateJSONErrorMessageWithPreviousMessage()
-    {
-        JSONHelper jsonHelper = new JSONHelper();
-        String previousJSONObject = "{\"login\": \"testvalue\"}";
-        String testObject = "{\"login\": \"testvalue\", \"returnCode\": \"1\", \"errorReason\": \"value\", \"errorMessage\": \"value\"}";
-        String returnString = jsonHelper.createJSONErrorMessage(previousJSONObject, 1, "value", "value");
-        Assert.assertEquals(testObject, returnString);
-    }
 }
