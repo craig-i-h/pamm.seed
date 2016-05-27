@@ -16,7 +16,7 @@
 #
 # Creates a MariaDb based sql database running on a Docker container.
 # Usage:
-#   sh pamm-sql.sh
+#   sh sqlrun.sh
 #
 
 # the version of the MariaDb docker image to use
