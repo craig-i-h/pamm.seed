@@ -33,13 +33,14 @@ free_port() {
     fi
 }
 
-# wait for the server process to open a listethe specified port
-# usage:
-# wait_for_port 8080
+# wait for the server process to open a listening socket on the specified port
+# usage example:
+#    wait_for_port 8080
 wait_for_port() {
   while netstat -lnt | awk '$4 ~ /:'${1}'$/ {exit 1}'; do sleep 10; done
 }
 
+# prints to the output in color
 print() {
     CYAN='\033[0;36m'
     YELLOW='\033[1;33m'
@@ -48,6 +49,8 @@ print() {
 }
 
 DIR=$PWD
+
+# configure ports to use
 APP_PORT=8080
 SQL_PORT=3306
 TEST_SETUP_PORT=8081
