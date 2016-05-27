@@ -8,7 +8,7 @@ config = {
   },
 
   // CHANGE this to test server
-  baseUrl: "http://localhost:9000",
+  baseUrl: "http://localhost:8080",
 
   params: {
     profile: "local",
