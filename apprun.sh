@@ -19,20 +19,6 @@
 #   sh apprun.sh
 #
 
-# $1: port e.g. 8080
-# $2: path to PID file e.g. svc/target/universal/svc-0.0.1-SNAPSHOT/RUNNING_PID
-free_port() {
-    port="lsof -iTCP:${1}"
-    if [[ ! -z "${port}" ]]; then
-       echo "Port ${1} in use, killing related process"
-       fuser -k "${1}"/tcp
-    fi
-    if [[ ! -z $2 ]] && [[ -f $2 ]]; then
-       echo "Removing RUNNING_PID file in $2"
-       rm "${2}"
-    fi
-}
-
 # wait for the server process to open a listening socket on the specified port
 # usage example:
 #    wait_for_port 8080
@@ -58,11 +44,8 @@ SELENIUM_PORT=4444
 
 print "Current directory is $DIR"
 
-print "Killing previous applications listening on required ports"
-free_port ${APP_PORT} "svc/target/universal/svc-0.0.1-SNAPSHOT/RUNNING_PID"
-free_port ${TEST_SETUP_PORT} "testsetup/target/universal/testsetup-0.0.1-SNAPSHOT/RUNNING_PID"
-
-fuser -k ${SELENIUM_PORT}/tcp
+print "Cleaning up previous applications"
+sh shutdown.sh ${APP_PORT} ${TEST_SETUP_PORT} ${SELENIUM_PORT}
 
 print "Initialising MariaDb"
 sh sqlrun.sh
