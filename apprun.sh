@@ -99,7 +99,7 @@ print "Installing the required Javascript packages"
 npm install
 
 print "Updating the Seleniun web driver"
-npm run webdriver-updateclear
+npm run webdriver-update
 
 print "Installing the Selenium server"
 node_modules/.bin/webdriver-manager start &
