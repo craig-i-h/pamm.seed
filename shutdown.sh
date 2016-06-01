@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Compiles, packages and starts the pamm application.
+# Shuts down any existing instance of the PAMM application, the Test Setup and the Selenium Server.
 # Usage:
 #   sh shutdown.sh APP_PORT, TEST_SETUP_PORT, SELENIUM_PORT
 #
