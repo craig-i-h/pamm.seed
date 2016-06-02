@@ -44,36 +44,30 @@ SELENIUM_PORT=4444
 
 print "Current directory is $DIR"
 
-print "Cleaning up previous applications"
+print "Cleaning up any existing processes"
 sh shutdown.sh ${APP_PORT} ${TEST_SETUP_PORT} ${SELENIUM_PORT}
 
 print "Initialising MariaDb"
 sh sqlrun.sh
 
 print "Packaging the PAMM application"
-activator svc/dist
+activator svc/assembly
 
-cd $DIR/svc/target/universal
-unzip -o svc-0.0.1-SNAPSHOT.zip
-rm svc-0.0.1-SNAPSHOT.zip
-export APP_DIR=svc-0.0.1-SNAPSHOT
+cd $DIR/svc/target/scala-2.11
 
 print "Launching the PAMM application on port ${APP_PORT}"
-exec java -cp "$APP_DIR/lib/*" -Dhttp.port=${APP_PORT} -Ddb.default.url="jdbc:mysql://localhost:${SQL_PORT}/pamm?useUnicode=true&characterEncoding=utf8" play.core.server.ProdServerStart $APP_DIR &
+exec java -jar -Dhttp.port=${APP_PORT} -Ddb.default.url="jdbc:mysql://localhost:${SQL_PORT}/pamm?useUnicode=true&characterEncoding=utf8" svc-assembly-0.0.1-SNAPSHOT.jar &
 
 wait_for_port ${APP_PORT}
 
 cd $DIR
 print "Packaging the TEST SETUP application"
-activator testsetup/dist
+activator testsetup/assembly
 
-cd testsetup/target/universal
-unzip -o testsetup-0.0.1-SNAPSHOT.zip
-rm testsetup-0.0.1-SNAPSHOT.zip
-export TEST_SETUP_DIR=testsetup-0.0.1-SNAPSHOT
+cd testsetup/target/scala-2.11
 
 print "Launching the TEST SETUP application on port ${TEST_SETUP_PORT}"
-exec java -cp "$TEST_SETUP_DIR/lib/*" -Dhttp.port=${TEST_SETUP_PORT} -Ddb.default.url="jdbc:mysql://localhost:${SQL_PORT}/pamm?useUnicode=true&characterEncoding=utf8" play.core.server.ProdServerStart $TEST_SETUP_DIR &
+exec java -jar -Dhttp.port=${TEST_SETUP_PORT} -Ddb.default.url="jdbc:mysql://localhost:${SQL_PORT}/pamm?useUnicode=true&characterEncoding=utf8" testsetup-assembly-0.0.1-SNAPSHOT.jar &
 
 wait_for_port ${TEST_SETUP_PORT}
 

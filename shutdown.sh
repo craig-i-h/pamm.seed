@@ -16,24 +16,21 @@
 #
 # Shuts down any existing instance of the PAMM application, the Test Setup and the Selenium Server.
 # Usage:
-#   sh shutdown.sh APP_PORT, TEST_SETUP_PORT, SELENIUM_PORT
+#   sh shutdown.sh APP_PORT TEST_SETUP_PORT SELENIUM_PORT
 #
 
 # $1: port e.g. 8080
 # $2: path to PID file e.g. svc/target/universal/svc-0.0.1-SNAPSHOT/RUNNING_PID
 free_port() {
-    port="lsof -iTCP:${1}"
-    if [[ ! -z "${port}" ]]; then
-       echo "Port ${1} in use, killing related process"
-       fuser -k "${1}"/tcp
-    fi
-    if [[ ! -z $2 ]] && [[ -f $2 ]]; then
-       echo "Removing RUNNING_PID file in $2"
-       rm "${2}"
-    fi
+    fuser -k "${1}"/tcp
+    rm -rf $2
+#    if [[ ! -z $2 ]] && [[ -f $2 ]]; then
+#       echo "Removing RUNNING_PID file in $2"
+#       rm "${2}"
+#    fi
 }
 
-free_port ${1} "svc/target/universal/svc-0.0.1-SNAPSHOT/RUNNING_PID"
-free_port ${2} "testsetup/target/universal/testsetup-0.0.1-SNAPSHOT/RUNNING_PID"
+free_port ${1} "svc/target/scala-2.11"
+free_port ${2} "testsetup/target/scala-2.11"
 
 fuser -k ${3}/tcp
