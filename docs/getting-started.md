@@ -20,19 +20,24 @@ Now that the project files are in the local file system, you can either:
 
 The commands required to package the application, run it and execute the feature tests, are included in the [apprun.sh](../apprun.sh) bash script.
 
-The scripts does the following steps:
+The script executes the following steps:
 - Checks that the application is not already running, and if it is, then shut the relevant services down by calling the [shutdown.sh](../shutdown.sh) script. Relevant services are the **application** (on port 8080), the **test setup** web service (on port 8081) and the **Selenium** server (on port 4444).
 - Initialises the MariaDb database server, creates the PAMM database and creates the necessary tables. This is done by calling [sqlrun.sh](../sqlrun.sh). The script needs to run in a linux host, such as [Europa](https://github.com/gatblau/europa), as it creates the database server in a Docker container. If the MariaDb image is not cached locally, it pulls it from Docker Hub and then creates a container called *pamm-sql*.
 - Packages the PAMM seed application using activator. The application is packaged as an uber-jar with all dependencies included in the package to facilitate deployment and execution. The output packages can be found in the **svc/target/scala-2.11** folder.
 - Launches the application on port 8080.
 - Packages the Test Setup web service in a similar way as the application seed. This service provides an API for saving test data by the Protractor tests. Is only needed for running feature (integration) tests. The output packages can be found in the **testsetup/target/scala-2.11** folder.
 - Launches the Test Setup web service on port 8081.
-- Install all javascript packages required to run the tests.
+- Installs all javascript packages required to run the tests.
 - Updates the Selenium web driver.
 - Starts the Selenium server on port 4444.
 - Runs the tests using Protractor by calling [testrun.sh](../testrun.sh).
 
-If everything goes ok, you should see the web browser popping up and running the tests.
+To run the script type the following:
+``` bash
+sh apprun.sh
+```
+
+If everything goes ok, you should see the build process after which, the web browser pops up and runs the tests.
 
 After this, you can call [shutdown.sh](../shutdown.sh) to kill the application processes.
 
@@ -41,8 +46,14 @@ The database is kept running within the pamm-sql container. You can check it by 
 ## Import the file in an IDE for development
 
 ### In Intellij
-- import project 
-- sbt
+- On the initial window select the **Import Project** option
+- Select the pamm.seed folder
+- Select **Import project from external model**
+- Select **SBT**
+- Click Next
+- If not SDK is selected, then, in **Project SDK** click the **New button** and select the sdk you want to use
+- Click Finish
+
 
 
 ## Running the Application in Development mode
