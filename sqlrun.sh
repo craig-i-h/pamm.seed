@@ -26,10 +26,10 @@ MARIA_TAG=latest
 DB_PWD=n3us
 
 # the name of the user to have db access
-DB_USER_NAME=pammy
+DB_USER_NAME=pamm
 
 # the name of the db to be created
-DB_NAME=pammy
+DB_NAME=pamm
 
 # the db port to use
 DB_PORT=3306
@@ -74,20 +74,20 @@ if [[ ${container_exists} = 1 ]]; then
    docker rm -f ${CONTAINER_NAME}
 fi
 
-echo "Creates a new container"
+echo 'Creating a new '${CONTAINER_NAME}' container'
 docker run --name ${CONTAINER_NAME} -v ${CONTAINER_VOLUME_PATH}:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=${DB_PWD} -p ${DB_PORT}:3306 -d mariadb:${MARIA_TAG}
 
 # wait for the service in the container to start
 wait_for_mysql_server
 
 echo 'Creating the '${DB_NAME}' database'
-docker exec -itd "${CONTAINER_NAME}" /bin/sh -c "mysql -uroot -p${DB_PWD} -e 'create database "${DB_NAME}";'"
+docker exec "${CONTAINER_NAME}" /bin/sh -c "mysql -uroot -p${DB_PWD} -e 'create database "${DB_NAME}";'"
 
 echo 'Creating the '${DB_USER_NAME}' user'
-docker exec -itd ${CONTAINER_NAME} /bin/sh -c "mysql -uroot -p${DB_PWD} -e 'grant all privileges on "${DB_NAME}".* to '"${DB_USER_NAME}"'@'%' identified by '"${DB_PWD}"';"
+docker exec $CONTAINER_NAME /bin/sh -c "mysql -uroot -p${DB_PWD} -e 'grant all privileges on ${DB_NAME}.* to '\''${DB_USER_NAME}'\''@'\''%'\'' identified by '\''${DB_PWD}'\'';'"
 
 echo 'Copying the sql script to the container'
 docker cp ${DB_SCHEMA_PATH} ${CONTAINER_NAME}:/db.sql
 
 echo 'Creating the database tables and referencial integrity'
-docker exec -itd ${CONTAINER_NAME} bash -c "mysql -uroot -p${DB_PWD} ${DB_NAME} < db.sql"
+docker exec ${CONTAINER_NAME} bash -c "mysql -uroot -p${DB_PWD} ${DB_NAME} < db.sql"
