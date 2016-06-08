@@ -26,10 +26,10 @@ MARIA_TAG=latest
 DB_PWD=n3us
 
 # the name of the user to have db access
-DB_USER_NAME=pamm
+DB_USER_NAME=pammy
 
 # the name of the db to be created
-DB_NAME=pamm
+DB_NAME=pammy
 
 # the db port to use
 DB_PORT=3306
@@ -38,39 +38,56 @@ DB_PORT=3306
 DB_SCHEMA_PATH=svc/conf/evolutions/default/1.sql
 
 # the name of the pamm db container to be created
-CONTAINER_NAME=pamm-sql
+CONTAINER_NAME=pammy-sql
  
 # the path to the persistent volume in the docker host and container
-CONTAINER_VOLUME_PATH=/var/lib/mysql
+CONTAINER_VOLUME_PATH=/var/lib/mysql/pamm
 
-# check if the db container is running
-up=$(docker ps -a --filter name=$CONTAINER_NAME | grep -c Up)
+# checks if mysql client is installed and if not triggres the installation
+check_for_mysql_client() {
+    a = rpm -q mysql | grep -c 'not installed'
+    if [[ a = 1 ]]; then
+        sudo yum install mysql -y
+    fi
+}
 
-# check if the db container is stopped
-exited=$(docker ps -a --filter name=$CONTAINER_NAME | grep -c Exited)
+# waits for mysql to become available on localhost
+wait_for_mysql_server() {
+  printf "mysql starting: please wait "
+  until mysqladmin -u root -pn3us -s -h 127.0.0.1 ping; do
+   printf "."
+   sleep 2
+  done
+  printf "\n"
+}
 
-if [[ up -eq 0 ]] && [[ exited -eq 0 ]]; then  
-  if [[ ! -d "$CONTAINER_VOLUME_PATH" ]]; then
-    echo 'Creating SQL data files location on the host'
-    sudo mkdir ${CONTAINER_VOLUME_PATH}
-  fi
-  echo 'No container found - creating pamm-sql container'
-  docker run --name ${CONTAINER_NAME} -v ${CONTAINER_VOLUME_PATH}:${CONTAINER_VOLUME_PATH} -e MYSQL_ROOT_PASSWORD=${DB_PWD} -p ${DB_PORT}:3306 -d mariadb:${MARIA_TAG}
+echo 'Creating SQL data files location on the host'
+# removes any previous volume folder
+sudo rm -rf ${CONTAINER_VOLUME_PATH}
+# creates a  fresh volume folder
+sudo mkdir ${CONTAINER_VOLUME_PATH}
 
-  echo 'Creating the PAMM database'
-  a=(docker exec -it ${CONTAINER_NAME} bash -c "mysql -uroot -p${DB_PWD} -e 'create database ${DB_NAME};'")
-
-  echo 'Creating the PAMM user'
-  a=(docker exec $CONTAINER_NAME bash -c "mysql -uroot -p${DB_PWD} -e 'grant all privileges on ${DB_NAME}.* to '\''${DB_USER_NAME}'\''@'\''%'\'' identified by '\''${DB_PWD}'\'';'")
-
-  echo 'Copying the pamm sql script to the container'
-  docker cp ${DB_SCHEMA_PATH} ${CONTAINER_NAME}:/db.sql
-
-  echo 'Creating the database tables and referencial integrity'
-  a=(docker exec ${CONTAINER_NAME} bash -c "mysql -uroot -p${DB_PWD} ${DB_NAME} < db.sql")
-elif [[ exited -eq 0 ]]; then
-  echo 'pamm-sql is already running!'
-else
-  echo 'pamm-sql exists but is not running - starting pamm-sql'
-  docker start ${CONTAINER_NAME}
+# if the container exists, removes it
+container_exists=$(docker ps -a -f name=${CONTAINER_NAME} | grep ${CONTAINER_NAME} -c)
+if [[ ${container_exists} = 1 ]]; then
+   echo 'Removing existing '${CONTAINER_NAME}' container'
+   docker rm -f ${CONTAINER_NAME}
 fi
+
+echo "Creates a new container"
+docker run --name ${CONTAINER_NAME} -v ${CONTAINER_VOLUME_PATH}:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=${DB_PWD} -p ${DB_PORT}:3306 -d mariadb:${MARIA_TAG}
+
+# wait for the service in the container to start
+wait_for_mysql_server
+
+echo 'Creating the '${DB_NAME}' database'
+docker exec -itd "${CONTAINER_NAME}" /bin/sh -c "mysql -uroot -p${DB_PWD} -e 'create database "${DB_NAME}";'"
+
+echo 'Creating the '${DB_USER_NAME}' user'
+docker exec -itd ${CONTAINER_NAME} /bin/sh -c "mysql -uroot -p${DB_PWD} -e 'grant all privileges on "${DB_NAME}".* to '"${DB_USER_NAME}"'@'%' identified by '"${DB_PWD}"';"
+
+echo 'Copying the sql script to the container'
+docker cp ${DB_SCHEMA_PATH} ${CONTAINER_NAME}:/db.sql
+
+echo 'Creating the database tables and referencial integrity'
+docker exec -itd ${CONTAINER_NAME} bash -c "mysql -uroot -p${DB_PWD} ${DB_NAME} < db.sql"
