@@ -43,10 +43,17 @@ CONTAINER_NAME=pammy-sql
 # the path to the persistent volume in the docker host and container
 CONTAINER_VOLUME_PATH=/var/lib/mysql/pamm
 
-# checks if mysql client is installed and if not triggres the installation
+IS_RHEL=$(grep rhel /etc/os-release -c)
+
+if [[ ${IS_RHEL} = 0 ]]; then
+    echo 'WARNING: This script has been tested with RHEL 7 like hosts only.'
+fi
+
+# checks if mysql client is installed and if not, triggers its installation
 check_for_mysql_client() {
-    a = rpm -q mysql | grep -c 'not installed'
-    if [[ a = 1 ]]; then
+    a=$(rpm -q mysql | grep -c 'not installed')
+    if [[ ${a} = 1 ]]; then
+        echo 'Installing mysql client tools, please wait'
         sudo yum install mysql -y
     fi
 }
@@ -76,6 +83,9 @@ fi
 
 echo 'Creating a new '${CONTAINER_NAME}' container'
 docker run --name ${CONTAINER_NAME} -v ${CONTAINER_VOLUME_PATH}:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=${DB_PWD} -p ${DB_PORT}:3306 -d mariadb:${MARIA_TAG}
+
+# check if the mysql client tools are installed
+check_for_mysql_client
 
 # wait for the service in the container to start
 wait_for_mysql_server
