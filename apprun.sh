@@ -34,6 +34,8 @@ print() {
     printf "${CYAN}$(date +"%T") -> ${YELLOW}${1}${NC}\n"
 }
 
+startTime=$(date -u +"%s")
+
 DIR=$PWD
 
 # configure ports to use
@@ -85,3 +87,9 @@ wait_for_port ${SELENIUM_PORT}
 
 print "Running the feature tests"
 sh testrun.sh
+
+
+endTime=$(date -u +"%s")
+diff=$(($endTime-$startTime))
+
+print "Build & Test process complete: it took $(($diff / 60)) minutes and $(($diff % 60)) seconds."
