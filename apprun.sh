@@ -78,7 +78,7 @@ npm install
 print "Updating the Seleniun web driver"
 npm run webdriver-update
 
-print "Installing the Selenium server"
+print "Starting the Selenium server"
 node_modules/.bin/webdriver-manager start &
 
 wait_for_port ${SELENIUM_PORT}
