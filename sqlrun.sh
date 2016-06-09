@@ -72,7 +72,7 @@ echo 'Creating SQL data files location on the host'
 # removes any previous volume folder
 sudo rm -rf ${CONTAINER_VOLUME_PATH}
 # creates a  fresh volume folder
-sudo mkdir ${CONTAINER_VOLUME_PATH}
+sudo mkdir -p ${CONTAINER_VOLUME_PATH}
 
 # if the container exists, removes it
 container_exists=$(docker ps -a -f name=${CONTAINER_NAME} | grep ${CONTAINER_NAME} -c)
