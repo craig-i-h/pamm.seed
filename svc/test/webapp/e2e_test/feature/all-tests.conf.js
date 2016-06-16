@@ -4,7 +4,7 @@ config = {
   seleniumAddress: 'http://localhost:4444/wd/hub',
 
   capabilities: {
-    browserName: 'chrome'
+    browserName: 'firefox'
   },
 
   // CHANGE this to test server
